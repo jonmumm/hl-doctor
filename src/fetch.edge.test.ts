@@ -41,17 +41,20 @@ const RPC: Record<string, unknown> = {
 let server: ReplayServer;
 const contentTypes: (string | undefined)[] = [];
 
+const pick = (overrides: Record<string, unknown>, defaults: Record<string, unknown>, key: string) =>
+  key in overrides ? overrides[key] : defaults[key];
+
+const rpcReply = (id: unknown, result: unknown) =>
+  result instanceof Error ? { jsonrpc: "2.0", id, error: { message: result.message } } : { jsonrpc: "2.0", id, result };
+
 const fake = async (info: Record<string, unknown> = {}, rpc: Record<string, unknown> = {}) => {
   server = await startFakeServer(({ path, contentType, body }) => {
     if (!isBody(body)) return { status: 400, body: "bad" };
     if (path.endsWith("/evm")) {
       contentTypes.push(contentType);
-      const method = String(body.method);
-      const result = method in rpc ? rpc[method] : RPC[method];
-      return { body: result instanceof Error ? { jsonrpc: "2.0", id: body.id, error: { message: result.message } } : { jsonrpc: "2.0", id: body.id, result } };
+      return { body: rpcReply(body.id, pick(rpc, RPC, String(body.method))) };
     }
-    const type = String(body.type);
-    return { body: type in info ? info[type] : INFO[type] };
+    return { body: pick(info, INFO, String(body.type)) };
   });
   return server.endpoints;
 };
