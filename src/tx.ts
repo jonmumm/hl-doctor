@@ -1,25 +1,11 @@
 // Pure checks: did each HyperCore-bound part of an EVM tx have the effect it should?
 import { formatUnits, numberToHex } from "viem";
+import { isRejected, rejectionReason } from "./orders.ts";
 import type { CoreActivity, DecodedAction, EvmEvent, EvmTx, FieldValue, Finding, Hex, Network } from "./types.ts";
 
 const QUEUE_GRACE_MS = 10_000; // CoreWriter orders and vault transfers are delayed "a few seconds" (docs)
 const CLOCK_SKEW_MS = 1_000;
 const SCALING_NOTE = "CoreWriter limitPx and sz are 10^8 × the human value, and the price must still fit the tick (5 significant figures, ≤ 6 - szDecimals decimals).";
-
-const REJECTIONS: Record<string, string> = {
-  perpMarginRejected: "Not enough margin in the perps account for this order.",
-  insufficientSpotBalanceRejected: "Not enough spot balance for this order.",
-  tickRejected: "The price is not a multiple of the tick size.",
-  minTradeNtlRejected: "The order is below the $10 minimum notional.",
-  badAloPxRejected: "A post-only (Alo) order would have crossed the book.",
-  iocCancelRejected: "An IOC order found nothing to fill against at that price.",
-  marketOrderNoLiquidityRejected: "No liquidity to fill a market order.",
-  reduceOnlyRejected: "Reduce-only order would have increased the position.",
-  oracleRejected: "The price is too far from the oracle price.",
-  tooManyOpenOrdersRejected: "The account has too many open orders.",
-  perpMaxPositionRejected: "The order would exceed the maximum position size.",
-  openInterestIncreaseRejected: "The market is at its open interest cap.",
-};
 
 const MOVES_FUNDS = new Set(["sendAsset", "spotSend", "usdClassTransfer", "vaultTransfer", "stakingDeposit", "stakingWithdraw"]);
 
@@ -27,8 +13,6 @@ const show = (fields: Record<string, FieldValue>) =>
   Object.entries(fields)
     .map(([k, v]) => `${k}=${String(v)}`)
     .join(" ");
-
-const isRejected = (status: string) => status === "rejected" || status.endsWith("Rejected");
 
 type Order = CoreActivity["orders"][number];
 type OkAction = Extract<DecodedAction, { ok: true }>;
@@ -49,7 +33,7 @@ const matchedOrderFinding = (o: Order): Finding => {
     return {
       severity: "error",
       title: `${o.coin} order rejected (${o.status})`,
-      detail: REJECTIONS[o.status] ?? "HyperCore rejected the order.",
+      detail: rejectionReason(o.status),
       fix: o.status === "tickRejected" ? SCALING_NOTE : undefined,
     };
   }

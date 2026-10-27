@@ -74,3 +74,37 @@ describe("parseArgs", () => {
     expect(parseArgs([ADDRESS, HASH])).toEqual({ kind: "error", message: `One target at a time, got ${ADDRESS} and ${HASH}` });
   });
 });
+
+describe("--order", () => {
+  const CLOID = "0x77358a5efbdd32bf929b06785cf18c56";
+
+  it("takes an oid as a number", () => {
+    expect(parseArgs([ADDRESS, "--order", "63823780855"])).toMatchObject({ kind: "address", order: 63823780855 });
+  });
+
+  it("takes a 0x cloid (16 bytes), before or after the target", () => {
+    expect(parseArgs(["--order", CLOID, ADDRESS])).toMatchObject({ kind: "address", target: ADDRESS, order: CLOID });
+  });
+
+  it("is undefined when not given", () => {
+    expect(parseArgs([ADDRESS])).toMatchObject({ kind: "address", order: undefined });
+  });
+
+  it("needs a value", () => {
+    expect(parseArgs([ADDRESS, "--order"])).toEqual({ kind: "error", message: "--order needs an oid or a 0x cloid" });
+  });
+
+  it.each(["abc", "-1", "1.5", "0x1234", `${CLOID}00`, `x${CLOID}`, "99999999999999999999"])("rejects %s", (bad) => {
+    expect(parseArgs([ADDRESS, "--order", bad])).toEqual({ kind: "error", message: `--order needs an oid or a 0x cloid (0x + 32 hex), got ${bad}` });
+  });
+
+  it("only applies to an address", () => {
+    expect(parseArgs([HASH, "--order", "5"])).toEqual({ kind: "error", message: "--order only applies to an address" });
+  });
+});
+
+describe("targets must be exactly an address or a tx hash", () => {
+  it.each([`x${ADDRESS}`, `${ADDRESS}ab`, `x${HASH}`, `${HASH}ab`])("rejects %s", (bad) => {
+    expect(parseArgs([bad])).toEqual({ kind: "error", message: `Not an address (0x + 40 hex) or tx hash (0x + 64 hex): ${bad}` });
+  });
+});

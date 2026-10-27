@@ -7,10 +7,11 @@ npx hl-doctor <address>            # account health on testnet
 npx hl-doctor <evm tx hash>        # what a HyperEVM tx did (or didn't do) on HyperCore
 npx hl-doctor <address> --mainnet  # same, on mainnet
 npx hl-doctor <address> --json     # { target, network, sections: [{ heading, findings }] }
+npx hl-doctor <address> --order <oid | 0x cloid>  # why an API order was rejected or canceled
 npx hl-doctor --help               # all options and examples
 ```
 
-Options: `--mainnet`, `--builder <address>`, `--as-builder`, `--json`, `-h/--help`, `-v/--version`. Unknown options and malformed addresses are rejected with exit code 2.
+Options: `--mainnet`, `--builder <address>`, `--as-builder`, `--order <oid | cloid>`, `--json`, `-h/--help`, `-v/--version`. Unknown options and malformed addresses are rejected with exit code 2.
 
 Read-only: it only calls Hyperliquid's public info API and the public HyperEVM RPC. No private key, no wallet connection.
 
@@ -27,6 +28,11 @@ These come from the questions developers ask most in the Hyperliquid builders Di
 - No HYPE or USDC on spot to pay for Core→EVM transfer gas
 - No HYPE on HyperEVM; small blocks only (3M gas) and how to enable big blocks
 - The per-address request budget (10,000 + 1 per USDC traded)
+- Orders rejected in the last 24 h, grouped by reason (`tickRejected`, `minTradeNtlRejected`, `perpMarginRejected`, …)
+
+**For one order** (`--order <oid | 0x cloid>`)
+- Its status with coin, side, size and price, and what a rejection or a HyperCore-initiated cancel (`reduceOnlyCanceled`, `marginCanceled`, …) means
+- An unknown order: wrong network, or placed through an API wallet under its owner's address
 
 **For a builder code** (`--builder <address>`, `--as-builder`)
 - Has the user approved the builder, and up to what fee
@@ -49,6 +55,8 @@ Seam tests replay recorded testnet responses for these HyperEVM txs (`src/real-c
 | `0x9f4dd8a29f37049f3d1fcb73c151c99679eabdc56985ff140bb8c4064e6080c3` | HYPE sent to 0x2222… | ok: 6.5753898 HYPE reached HyperCore |
 | `0x6aa11f168c07ac290a1593136ede20ddc04f347eea94cc1ada3cf72f2cca7e48` | token 0 sent to its 0x20… system address, then `sendAsset` | ok on both |
 | `0xd348e5e1c6196b7d1f84d367d267dfb19ebeb1e40607cfbdfee969989788dc49` | CoreWriter action id 14 (not in the docs) | error: could not be decoded |
+
+Address-mode seam tests (`src/orders.seam.test.ts`) replay real testnet orders: `--order 63823780855` and its cloid (ETH buy filled), `--order 63367351019` (SOL buy rejected, `minTradeNtlRejected`), an unknown oid, and the 24 h rejection summary on either side of that rejection.
 
 Find more with `pnpm find-cases [--blocks 20000] [--mainnet]`, which scans recent blocks and lists candidate tx hashes by kind.
 

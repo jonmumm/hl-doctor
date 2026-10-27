@@ -2,12 +2,24 @@
 import { readFileSync } from "node:fs";
 import { z } from "zod";
 import { activeElsewhere, builderEligibility, describeAbstraction, diagnoseAddress, diagnoseBuilderApproval } from "./address.ts";
-import { parseArgs, USAGE } from "./args.ts";
+import { parseArgs, USAGE, type OrderId } from "./args.ts";
 import { classifyTx } from "./evmtx.ts";
-import { DEFAULT_ENDPOINTS, explorerTxUrl, fetchAddressSnapshot, fetchBuilderSnapshot, fetchCoreActivity, fetchEvmTx, hasCoreAccount, type Endpoints } from "./fetch.ts";
+import {
+  DEFAULT_ENDPOINTS,
+  explorerTxUrl,
+  fetchAddressSnapshot,
+  fetchBuilderSnapshot,
+  fetchCoreActivity,
+  fetchEvmTx,
+  fetchOrder,
+  fetchOrderHistory,
+  hasCoreAccount,
+  type Endpoints,
+} from "./fetch.ts";
+import { diagnoseOrder, recentRejections } from "./orders.ts";
 import { renderReport, reportExitCode, reportJson, type Report, type Section } from "./render.ts";
 import { diagnoseTx, otherNetwork, txNotFound, txUsers } from "./tx.ts";
-import type { CoreActivity, Hex, Network } from "./types.ts";
+import type { AddressSnapshot, CoreActivity, Hex, Network } from "./types.ts";
 
 export interface Io {
   out: (text: string) => void;
@@ -24,21 +36,27 @@ interface AddressRequest {
   network: Network;
   builder: Hex | undefined;
   asBuilder: boolean;
+  order: OrderId | undefined;
 }
 
-const doctorAddress = async ({ target, network, builder, asBuilder }: AddressRequest, ep: Endpoints): Promise<Report> => {
-  const s = await fetchAddressSnapshot(network, target, ep);
-  // Only a missing account needs the other network; a failed lookup there just means no hint.
-  const elsewhere = s.role.role === "missing" && (await hasCoreAccount(otherNetwork(network), target, ep));
-  const sections: Section[] = [{ heading: "Account", findings: [...diagnoseAddress(s), ...activeElsewhere({ network, elsewhere })] }];
-  if (builder) sections.push({ heading: `Builder ${builder}`, findings: diagnoseBuilderApproval(await fetchBuilderSnapshot(network, target, builder, ep)) });
-  if (asBuilder) sections.push({ heading: "As a builder", findings: builderEligibility({ accountValue: s.perp.accountValue, abstraction: s.abstraction, role: s.role }) });
+const addressSummary = (s: AddressSnapshot): string[] => {
   const spot = s.spot.balances.map((b) => `${b.total} ${b.coin}`).join(", ") || "empty";
-  const summary = [
+  return [
     `  perps value ${s.perp.accountValue} USDC, withdrawable ${s.perp.withdrawable}; mode ${describeAbstraction(s.abstraction)}`,
     `  spot: ${spot}${s.evm ? `; HyperEVM: ${s.evm.hype} HYPE` : ""}`,
   ];
-  return { target, network, summary, sections };
+};
+
+const doctorAddress = async ({ target, network, builder, asBuilder, order }: AddressRequest, ep: Endpoints, now: number): Promise<Report> => {
+  const [s, history] = await Promise.all([fetchAddressSnapshot(network, target, ep), fetchOrderHistory(network, target, ep)]);
+  // Only a missing account needs the other network; a failed lookup there just means no hint.
+  const elsewhere = s.role.role === "missing" && (await hasCoreAccount(otherNetwork(network), target, ep));
+  const orders = history ? recentRejections(history, now) : [];
+  const sections: Section[] = [{ heading: "Account", findings: [...diagnoseAddress(s), ...activeElsewhere({ network, elsewhere }), ...orders] }];
+  if (order !== undefined) sections.push({ heading: `Order ${order}`, findings: diagnoseOrder(String(order), await fetchOrder(network, target, order, ep)) });
+  if (builder) sections.push({ heading: `Builder ${builder}`, findings: diagnoseBuilderApproval(await fetchBuilderSnapshot(network, target, builder, ep)) });
+  if (asBuilder) sections.push({ heading: "As a builder", findings: builderEligibility({ accountValue: s.perp.accountValue, abstraction: s.abstraction, role: s.role }) });
+  return { target, network, summary: addressSummary(s), sections };
 };
 
 const doctorTx = async (target: Hex, network: Network, ep: Endpoints): Promise<Report> => {
@@ -59,12 +77,12 @@ const doctorTx = async (target: Hex, network: Network, ep: Endpoints): Promise<R
   return { target, network, summary, sections: [{ heading: "HyperCore effect", findings }] };
 };
 
-export const run = async (argv: string[], io: Io, ep = DEFAULT_ENDPOINTS): Promise<number> => {
+export const run = async (argv: string[], io: Io, ep = DEFAULT_ENDPOINTS, now = Date.now()): Promise<number> => {
   const args = parseArgs(argv);
   if (args.kind === "help") return io.out(USAGE), 0;
   if (args.kind === "version") return io.out(packageVersion()), 0;
   if (args.kind === "error") return io.err(`hl-doctor: ${args.message}\nRun hl-doctor --help for usage.`), 2;
-  const report = args.kind === "address" ? await doctorAddress(args, ep) : await doctorTx(args.target, args.network, ep);
+  const report = args.kind === "address" ? await doctorAddress(args, ep, now) : await doctorTx(args.target, args.network, ep);
   io.out(args.json ? reportJson(report) : renderReport(report, io.color));
   return reportExitCode(report);
 };

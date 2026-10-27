@@ -8,7 +8,8 @@
     "src/evmtx.ts",
     "src/fetch.ts",
     "src/args.ts",
-    "src/render.ts"
+    "src/render.ts",
+    "src/orders.ts"
   ],
   "reporters": [
     "clear-text",

@@ -1,6 +1,6 @@
 // Parsing edge cases at the seam, using a programmable fake of the info API and JSON-RPC.
 import { afterEach, describe, expect, it } from "vitest";
-import { DEFAULT_ENDPOINTS, explorerTxUrl, fetchAddressSnapshot, fetchCoreActivity, fetchEvmTx } from "./fetch.ts";
+import { DEFAULT_ENDPOINTS, explorerTxUrl, fetchAddressSnapshot, fetchCoreActivity, fetchEvmTx, fetchOrder, fetchOrderHistory, hasCoreAccount } from "./fetch.ts";
 import { startFakeServer, type ReplayServer } from "./replay-server.ts";
 import type { Hex } from "./types.ts";
 
@@ -179,5 +179,38 @@ describe("ledger window", () => {
     });
     await fetchCoreActivity("testnet", USER, 1_000, server.endpoints);
     expect(starts).toEqual([0]);
+  });
+});
+
+describe("orders", () => {
+  const ORDER = { coin: "BTC", side: "A", limitPx: "65000.0", sz: "0.0", origSz: "0.01", oid: 7, cloid: null, timestamp: 1 };
+
+  it("maps historicalOrders to order records", async () => {
+    const ep = await fake({ historicalOrders: [{ order: ORDER, status: "tickRejected", statusTimestamp: 99 }] });
+    expect(await fetchOrderHistory("testnet", USER, ep)).toEqual([
+      { oid: 7, cloid: null, coin: "BTC", side: "A", limitPx: "65000.0", origSz: "0.01", status: "tickRejected", statusTimestamp: 99 },
+    ]);
+  });
+
+  it("hasCoreAccount is false (not just falsy) when the lookup fails", async () => {
+    server = await startFakeServer(() => ({ status: 500, body: "down" }));
+    expect(await hasCoreAccount("testnet", USER, server.endpoints)).toBe(false);
+  });
+
+  it("gives no history when the lookup fails", async () => {
+    server = await startFakeServer(() => ({ status: 500, body: "down" }));
+    expect(await fetchOrderHistory("testnet", USER, server.endpoints)).toBeNull();
+  });
+
+  it("maps a found order and asks for it by oid", async () => {
+    const asked: unknown[] = [];
+    server = await startFakeServer(({ body }) => (asked.push(body), { body: { status: "order", order: { order: ORDER, status: "open", statusTimestamp: 5 } } }));
+    expect(await fetchOrder("mainnet", USER, 7, server.endpoints)).toMatchObject({ oid: 7, status: "open", statusTimestamp: 5 });
+    expect(asked).toEqual([{ type: "orderStatus", user: USER, oid: 7 }]);
+  });
+
+  it("returns null for unknownOid", async () => {
+    const ep = await fake({ orderStatus: { status: "unknownOid" } });
+    expect(await fetchOrder("testnet", USER, "0x000000000000000000000000000000ff", ep)).toBeNull();
   });
 });

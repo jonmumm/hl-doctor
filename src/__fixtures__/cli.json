@@ -1,71 +1,79 @@
 {
-  "/testnet/info {\"type\":\"legalCheck\",\"user\":\"0x963a323bebea09fe2b094d23144e7187f90514d0\"}": {
+  "/testnet/info {\"type\":\"clearinghouseState\",\"user\":\"0x963a323bebea09fe2b094d23144e7187f90514d0\"}": {
     "status": 200,
-    "body": "{\"acceptedTerms\":false,\"userAllowed\":true,\"restrictions\":\"a\"}"
+    "body": "{\"marginSummary\":{\"accountValue\":\"0.0\",\"totalNtlPos\":\"0.0\",\"totalRawUsd\":\"0.0\",\"totalMarginUsed\":\"0.0\"},\"crossMarginSummary\":{\"accountValue\":\"0.0\",\"totalNtlPos\":\"0.0\",\"totalRawUsd\":\"0.0\",\"totalMarginUsed\":\"0.0\"},\"crossMaintenanceMarginUsed\":\"0.0\",\"withdrawable\":\"0.0\",\"assetPositions\":[],\"time\":1793118461198}"
   },
   "/testnet/info {\"type\":\"userRateLimit\",\"user\":\"0x963a323bebea09fe2b094d23144e7187f90514d0\"}": {
     "status": 200,
     "body": "{\"cumVlm\":\"0.0\",\"nRequestsUsed\":0,\"nRequestsCap\":10000,\"nRequestsSurplus\":0}"
   },
+  "/mainnet/info {\"type\":\"userRole\",\"user\":\"0x963a323bebea09fe2b094d23144e7187f90514d0\"}": {
+    "status": 200,
+    "body": "{\"role\":\"missing\"}"
+  },
+  "/testnet/info {\"type\":\"legalCheck\",\"user\":\"0x963a323bebea09fe2b094d23144e7187f90514d0\"}": {
+    "status": 200,
+    "body": "{\"acceptedTerms\":false,\"userAllowed\":true,\"restrictions\":\"a\"}"
+  },
   "/testnet/evm {\"jsonrpc\":\"2.0\",\"method\":\"eth_usingBigBlocks\",\"params\":[\"0x963a323Bebea09Fe2B094D23144e7187f90514D0\"]}": {
     "status": 200,
     "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":false}"
-  },
-  "/testnet/info {\"type\":\"spotClearinghouseState\",\"user\":\"0x963a323bebea09fe2b094d23144e7187f90514d0\"}": {
-    "status": 200,
-    "body": "{\"balances\":[]}"
   },
   "/testnet/info {\"type\":\"userAbstraction\",\"user\":\"0x963a323bebea09fe2b094d23144e7187f90514d0\"}": {
     "status": 200,
     "body": "\"default\""
   },
-  "/testnet/info {\"type\":\"clearinghouseState\",\"user\":\"0x963a323bebea09fe2b094d23144e7187f90514d0\"}": {
-    "status": 200,
-    "body": "{\"marginSummary\":{\"accountValue\":\"0.0\",\"totalNtlPos\":\"0.0\",\"totalRawUsd\":\"0.0\",\"totalMarginUsed\":\"0.0\"},\"crossMarginSummary\":{\"accountValue\":\"0.0\",\"totalNtlPos\":\"0.0\",\"totalRawUsd\":\"0.0\",\"totalMarginUsed\":\"0.0\"},\"crossMaintenanceMarginUsed\":\"0.0\",\"withdrawable\":\"0.0\",\"assetPositions\":[],\"time\":1793116337380}"
-  },
   "/testnet/info {\"type\":\"userRole\",\"user\":\"0x963a323bebea09fe2b094d23144e7187f90514d0\"}": {
     "status": 200,
     "body": "{\"role\":\"missing\"}"
+  },
+  "/testnet/info {\"type\":\"spotClearinghouseState\",\"user\":\"0x963a323bebea09fe2b094d23144e7187f90514d0\"}": {
+    "status": 200,
+    "body": "{\"balances\":[]}"
+  },
+  "/testnet/info {\"type\":\"historicalOrders\",\"user\":\"0x963a323bebea09fe2b094d23144e7187f90514d0\"}": {
+    "status": 200,
+    "body": "[]"
   },
   "/testnet/evm {\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0x963a323Bebea09Fe2B094D23144e7187f90514D0\",\"latest\"]}": {
     "status": 200,
     "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":\"0x0\"}"
   },
-  "/mainnet/info {\"type\":\"userRole\",\"user\":\"0x963a323bebea09fe2b094d23144e7187f90514d0\"}": {
-    "status": 200,
-    "body": "{\"role\":\"missing\"}"
-  },
   "/mainnet/info {\"type\":\"userRole\",\"user\":\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\"}": {
     "status": 200,
     "body": "{\"role\":\"vault\"}"
+  },
+  "/mainnet/info {\"type\":\"userRateLimit\",\"user\":\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\"}": {
+    "status": 200,
+    "body": "{\"cumVlm\":\"0.0\",\"nRequestsUsed\":6795096,\"nRequestsCap\":10000,\"nRequestsSurplus\":0}"
+  },
+  "/mainnet/info {\"type\":\"legalCheck\",\"user\":\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\"}": {
+    "status": 200,
+    "body": "{\"acceptedTerms\":true,\"userAllowed\":true,\"restrictions\":\"a\"}"
+  },
+  "/mainnet/info {\"type\":\"clearinghouseState\",\"user\":\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\"}": {
+    "status": 200,
+    "body": "{\"marginSummary\":{\"accountValue\":\"34276902.7467949986\",\"totalNtlPos\":\"0.0\",\"totalRawUsd\":\"34276902.7467949986\",\"totalMarginUsed\":\"477.867397\"},\"crossMarginSummary\":{\"accountValue\":\"34276424.8793980032\",\"totalNtlPos\":\"0.0\",\"totalRawUsd\":\"34276424.8793980032\",\"totalMarginUsed\":\"0.0\"},\"crossMaintenanceMarginUsed\":\"0.0\",\"withdrawable\":\"34276424.8793980032\",\"assetPositions\":[],\"time\":1793118461747}"
   },
   "/mainnet/info {\"type\":\"spotClearinghouseState\",\"user\":\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\"}": {
     "status": 200,
     "body": "{\"balances\":[]}"
   },
-  "/mainnet/info {\"type\":\"clearinghouseState\",\"user\":\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\"}": {
+  "/mainnet/info {\"type\":\"historicalOrders\",\"user\":\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\"}": {
     "status": 200,
-    "body": "{\"marginSummary\":{\"accountValue\":\"34279023.2321309969\",\"totalNtlPos\":\"0.0\",\"totalRawUsd\":\"34279023.2321309969\",\"totalMarginUsed\":\"477.867397\"},\"crossMarginSummary\":{\"accountValue\":\"34278545.3647340015\",\"totalNtlPos\":\"0.0\",\"totalRawUsd\":\"34278545.3647340015\",\"totalMarginUsed\":\"0.0\"},\"crossMaintenanceMarginUsed\":\"0.0\",\"withdrawable\":\"34278545.3647340015\",\"assetPositions\":[],\"time\":1793116337769}"
-  },
-  "/mainnet/evm {\"jsonrpc\":\"2.0\",\"method\":\"eth_usingBigBlocks\",\"params\":[\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\"]}": {
-    "status": 200,
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":false}"
-  },
-  "/mainnet/info {\"type\":\"userRateLimit\",\"user\":\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\"}": {
-    "status": 200,
-    "body": "{\"cumVlm\":\"0.0\",\"nRequestsUsed\":6794900,\"nRequestsCap\":10000,\"nRequestsSurplus\":0}"
-  },
-  "/mainnet/evm {\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\",\"latest\"]}": {
-    "status": 200,
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":\"0x71afd498d0000\"}"
+    "body": "[]"
   },
   "/mainnet/info {\"type\":\"userAbstraction\",\"user\":\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\"}": {
     "status": 200,
     "body": "\"default\""
   },
-  "/mainnet/info {\"type\":\"legalCheck\",\"user\":\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\"}": {
+  "/mainnet/evm {\"jsonrpc\":\"2.0\",\"method\":\"eth_usingBigBlocks\",\"params\":[\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\"]}": {
     "status": 200,
-    "body": "{\"acceptedTerms\":true,\"userAllowed\":true,\"restrictions\":\"a\"}"
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":false}"
+  },
+  "/mainnet/evm {\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\",\"latest\"]}": {
+    "status": 200,
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":\"0x71afd498d0000\"}"
   },
   "/mainnet/info {\"type\":\"maxBuilderFee\",\"user\":\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\",\"builder\":\"0xdfc24b077bc1425ad1dea75bcb6f8158e10df303\"}": {
     "status": 200,
@@ -83,10 +91,6 @@
     "status": 200,
     "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"hash\":\"0x3e068cb87b446e420d49675d3ffb291ecded544cbf05b82fdca563abf8b76f3d\",\"parentHash\":\"0xe5a62a13cbc74213893c8644eed48b72c7cdae7f170283a208d242710fa51d0b\",\"sha3Uncles\":\"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347\",\"miner\":\"0x0000000000000000000000000000000000000000\",\"stateRoot\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"transactionsRoot\":\"0x4883173664997adf97b8a641f8b311b13d5bb8dfc64fd9a5e1e56d508f3b1a64\",\"receiptsRoot\":\"0xaf2f651756589ea5ba47704413b6f11afa46c922745c435318df1c3eb2a9eda4\",\"logsBloom\":\"0x00000000020000080800000000000040000000000000001000020000400000000000000000000040002000000008408000004802060000004002804000000c00000000000401c01000000008004000000048000080410000000080240200000000000000008000100000000200000000000001000000040008000110000010000800000008200000080000000000000104000001000000000800000008000000000000020000000000000000000000000040400000000000000004001000000000000002000000810000040020140000000004000400880000001012000000000000000800080000000000016000000000000000000000000000000204004020\",\"difficulty\":\"0x0\",\"number\":\"0x40d88a6\",\"gasLimit\":\"0x2dc6c0\",\"gasUsed\":\"0x60992\",\"timestamp\":\"0x6ae0353c\",\"extraData\":\"0x\",\"mixHash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"nonce\":\"0x0000000000000000\",\"baseFeePerGas\":\"0x5f5e100\",\"withdrawalsRoot\":\"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421\",\"blobGasUsed\":\"0x0\",\"excessBlobGas\":\"0x0\",\"parentBeaconBlockRoot\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"size\":\"0x54a\",\"uncles\":[],\"transactions\":[\"0x53e465ff654438e7d481cd0e243d10894833f328edb0d3eb3e96c01e40f75fb9\",\"0x66a78674e03f25b6c50ee618c410f2744d8b4256c9a39a6b76d7ec5e6d7bdca1\",\"0xbda23c808243e1ba530c4035f4188bb6d63cb32c6a24a9e8d976d3201dafa24a\"],\"withdrawals\":[]}}"
   },
-  "/testnet/info {\"type\":\"userNonFundingLedgerUpdates\",\"user\":\"0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2\",\"startTime\":1793078583000}": {
-    "status": 200,
-    "body": "[{\"time\":1793082172461,\"hash\":\"0x70139f8ff7efcd45718d042cb4664e00004eb77592e2ec1713dc4ae2b6e3a730\",\"delta\":{\"type\":\"spotTransfer\",\"token\":\"HYPE\",\"amount\":\"1.288\",\"usdcValue\":\"202.96304\",\"user\":\"0x2222222222222222222222222222222222222222\",\"destination\":\"0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2\",\"fee\":\"0.0\",\"nativeTokenFee\":\"0.0\",\"nonce\":645034,\"feeToken\":\"\"}},{\"time\":1793082390392,\"hash\":\"0x9a890e6a891633849c02042cb4735d0000c42650241952563e51b9bd481a0d6f\",\"delta\":{\"type\":\"cStakingTransfer\",\"token\":\"HYPE\",\"amount\":\"1.288\",\"isDeposit\":true}},{\"time\":1793104455375,\"hash\":\"0xcbda4d280ebbb25bcd54042cb995bf000015650da9bed12d6fa2f87acdbf8c46\",\"delta\":{\"type\":\"spotTransfer\",\"token\":\"HYPE\",\"amount\":\"0.0011\",\"usdcValue\":\"0.173338\",\"user\":\"0x2222222222222222222222222222222222222222\",\"destination\":\"0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2\",\"fee\":\"0.0\",\"nativeTokenFee\":\"0.0\",\"nonce\":645823,\"feeToken\":\"\"}},{\"time\":1793104647368,\"hash\":\"0x2af332ab4655de9a2c6c042cb9a1c100002e4a90e158fd6ccebbddfe0559b884\",\"delta\":{\"type\":\"cStakingTransfer\",\"token\":\"HYPE\",\"amount\":\"0.0011\",\"isDeposit\":true}},{\"time\":1793104797484,\"hash\":\"0xe515edda917ddbabe68f042cb9ab5b00005105c02c70fa7d88de992d5071b596\",\"delta\":{\"type\":\"spotTransfer\",\"token\":\"HYPE\",\"amount\":\"0.0066\",\"usdcValue\":\"1.040028\",\"user\":\"0x2222222222222222222222222222222222222222\",\"destination\":\"0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2\",\"fee\":\"0.0\",\"nativeTokenFee\":\"0.0\",\"nonce\":645840,\"feeToken\":\"\"}},{\"time\":1793104969378,\"hash\":\"0xec6d5dd29363e1e1ede7042cb9b6660000a875b82e6700b3903609255267bbcc\",\"delta\":{\"type\":\"cStakingTransfer\",\"token\":\"HYPE\",\"amount\":\"0.0066\",\"isDeposit\":true}},{\"time\":1793105306432,\"hash\":\"0x223f7af35cd44bfd23b9042cb9cb4900007a92d8f7d76acfc60826461bd825e7\",\"delta\":{\"type\":\"spotTransfer\",\"token\":\"HYPE\",\"amount\":\"0.0044\",\"usdcValue\":\"0.693352\",\"user\":\"0x2222222222222222222222222222222222222222\",\"destination\":\"0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2\",\"fee\":\"0.0\",\"nativeTokenFee\":\"0.0\",\"nonce\":645855,\"feeToken\":\"\"}},{\"time\":1793105487385,\"hash\":\"0xcbb5e9adbd3e0068cd2f042cb9d6c70000f1019358311f3a6f7e95007c31da53\",\"delta\":{\"type\":\"cStakingTransfer\",\"token\":\"HYPE\",\"amount\":\"0.0044\",\"isDeposit\":true}}]"
-  },
   "/testnet/info {\"type\":\"historicalOrders\",\"user\":\"0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2\"}": {
     "status": 200,
     "body": "[]"
@@ -95,13 +99,17 @@
     "status": 200,
     "body": "{\"role\":\"user\"}"
   },
-  "/testnet/info {\"type\":\"clearinghouseState\",\"user\":\"0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2\"}": {
+  "/testnet/info {\"type\":\"userNonFundingLedgerUpdates\",\"user\":\"0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2\",\"startTime\":1793078583000}": {
     "status": 200,
-    "body": "{\"marginSummary\":{\"accountValue\":\"0.0\",\"totalNtlPos\":\"0.0\",\"totalRawUsd\":\"0.0\",\"totalMarginUsed\":\"0.0\"},\"crossMarginSummary\":{\"accountValue\":\"0.0\",\"totalNtlPos\":\"0.0\",\"totalRawUsd\":\"0.0\",\"totalMarginUsed\":\"0.0\"},\"crossMaintenanceMarginUsed\":\"0.0\",\"withdrawable\":\"0.0\",\"assetPositions\":[],\"time\":1793116338510}"
+    "body": "[{\"time\":1793082172461,\"hash\":\"0x70139f8ff7efcd45718d042cb4664e00004eb77592e2ec1713dc4ae2b6e3a730\",\"delta\":{\"type\":\"spotTransfer\",\"token\":\"HYPE\",\"amount\":\"1.288\",\"usdcValue\":\"202.96304\",\"user\":\"0x2222222222222222222222222222222222222222\",\"destination\":\"0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2\",\"fee\":\"0.0\",\"nativeTokenFee\":\"0.0\",\"nonce\":645034,\"feeToken\":\"\"}},{\"time\":1793082390392,\"hash\":\"0x9a890e6a891633849c02042cb4735d0000c42650241952563e51b9bd481a0d6f\",\"delta\":{\"type\":\"cStakingTransfer\",\"token\":\"HYPE\",\"amount\":\"1.288\",\"isDeposit\":true}},{\"time\":1793104455375,\"hash\":\"0xcbda4d280ebbb25bcd54042cb995bf000015650da9bed12d6fa2f87acdbf8c46\",\"delta\":{\"type\":\"spotTransfer\",\"token\":\"HYPE\",\"amount\":\"0.0011\",\"usdcValue\":\"0.173338\",\"user\":\"0x2222222222222222222222222222222222222222\",\"destination\":\"0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2\",\"fee\":\"0.0\",\"nativeTokenFee\":\"0.0\",\"nonce\":645823,\"feeToken\":\"\"}},{\"time\":1793104647368,\"hash\":\"0x2af332ab4655de9a2c6c042cb9a1c100002e4a90e158fd6ccebbddfe0559b884\",\"delta\":{\"type\":\"cStakingTransfer\",\"token\":\"HYPE\",\"amount\":\"0.0011\",\"isDeposit\":true}},{\"time\":1793104797484,\"hash\":\"0xe515edda917ddbabe68f042cb9ab5b00005105c02c70fa7d88de992d5071b596\",\"delta\":{\"type\":\"spotTransfer\",\"token\":\"HYPE\",\"amount\":\"0.0066\",\"usdcValue\":\"1.040028\",\"user\":\"0x2222222222222222222222222222222222222222\",\"destination\":\"0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2\",\"fee\":\"0.0\",\"nativeTokenFee\":\"0.0\",\"nonce\":645840,\"feeToken\":\"\"}},{\"time\":1793104969378,\"hash\":\"0xec6d5dd29363e1e1ede7042cb9b6660000a875b82e6700b3903609255267bbcc\",\"delta\":{\"type\":\"cStakingTransfer\",\"token\":\"HYPE\",\"amount\":\"0.0066\",\"isDeposit\":true}},{\"time\":1793105306432,\"hash\":\"0x223f7af35cd44bfd23b9042cb9cb4900007a92d8f7d76acfc60826461bd825e7\",\"delta\":{\"type\":\"spotTransfer\",\"token\":\"HYPE\",\"amount\":\"0.0044\",\"usdcValue\":\"0.693352\",\"user\":\"0x2222222222222222222222222222222222222222\",\"destination\":\"0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2\",\"fee\":\"0.0\",\"nativeTokenFee\":\"0.0\",\"nonce\":645855,\"feeToken\":\"\"}},{\"time\":1793105487385,\"hash\":\"0xcbb5e9adbd3e0068cd2f042cb9d6c70000f1019358311f3a6f7e95007c31da53\",\"delta\":{\"type\":\"cStakingTransfer\",\"token\":\"HYPE\",\"amount\":\"0.0044\",\"isDeposit\":true}}]"
   },
   "/testnet/info {\"type\":\"spotClearinghouseState\",\"user\":\"0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2\"}": {
     "status": 200,
     "body": "{\"balances\":[]}"
+  },
+  "/testnet/info {\"type\":\"clearinghouseState\",\"user\":\"0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2\"}": {
+    "status": 200,
+    "body": "{\"marginSummary\":{\"accountValue\":\"0.0\",\"totalNtlPos\":\"0.0\",\"totalRawUsd\":\"0.0\",\"totalMarginUsed\":\"0.0\"},\"crossMarginSummary\":{\"accountValue\":\"0.0\",\"totalNtlPos\":\"0.0\",\"totalRawUsd\":\"0.0\",\"totalMarginUsed\":\"0.0\"},\"crossMaintenanceMarginUsed\":\"0.0\",\"withdrawable\":\"0.0\",\"assetPositions\":[],\"time\":1793118462478}"
   },
   "/testnet/info {\"type\":\"meta\"}": {
     "status": 200,

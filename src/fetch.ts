@@ -3,7 +3,8 @@
 import { HttpTransport, InfoClient } from "@nktkas/hyperliquid";
 import { formatEther, hexToBigInt } from "viem";
 import { z } from "zod";
-import type { AddressSnapshot, BuilderSnapshot, CoreActivity, EvmTx, Hex, Network } from "./types.ts";
+import type { OrderId } from "./args.ts";
+import type { AddressSnapshot, BuilderSnapshot, CoreActivity, EvmTx, Hex, Network, OrderRecord } from "./types.ts";
 
 export interface Endpoints {
   api: Record<Network, string>;
@@ -155,4 +156,36 @@ export const fetchCoreActivity = async (network: Network, user: Hex, since: numb
     perpWithdrawable: num(perp.withdrawable),
     assetNames: new Map(meta.universe.map((m, i) => [i, m.name])),
   };
+};
+
+interface ApiOrder {
+  order: { oid: number; cloid: string | null; coin: string; side: "B" | "A"; limitPx: string; origSz: string };
+  status: string;
+  statusTimestamp: number;
+}
+
+const orderRecord = ({ order: o, status, statusTimestamp }: ApiOrder): OrderRecord => ({
+  oid: o.oid,
+  cloid: o.cloid,
+  coin: o.coin,
+  side: o.side,
+  limitPx: o.limitPx,
+  origSz: o.origSz,
+  status,
+  statusTimestamp,
+});
+
+/** null when HyperCore answers unknownOid. */
+export const fetchOrder = async (network: Network, user: Hex, oid: OrderId, ep = DEFAULT_ENDPOINTS): Promise<OrderRecord | null> => {
+  const r = await info(network, ep).orderStatus({ user, oid });
+  return r.status === "order" ? orderRecord(r.order) : null;
+};
+
+/** The latest (at most 2000) orders; null when the lookup fails, since the history is only a summary. */
+export const fetchOrderHistory = async (network: Network, user: Hex, ep = DEFAULT_ENDPOINTS): Promise<OrderRecord[] | null> => {
+  try {
+    return (await info(network, ep).historicalOrders({ user })).map(orderRecord);
+  } catch {
+    return null;
+  }
 };

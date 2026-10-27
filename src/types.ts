@@ -83,3 +83,15 @@ export interface CoreActivity {
   /** Perp asset index -> coin name, for matching CoreWriter limit orders. */
   assetNames: Map<number, string>;
 }
+
+/** One HyperCore order and its latest status, from orderStatus or historicalOrders. */
+export interface OrderRecord {
+  oid: number;
+  cloid: string | null;
+  coin: string;
+  side: "B" | "A";
+  limitPx: string;
+  origSz: string;
+  status: string;
+  statusTimestamp: number;
+}
