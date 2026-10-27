@@ -16,7 +16,7 @@
 - Hyperliquid API docs: https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api
 - CoreWriter actions and encoding: https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/hyperevm/interacting-with-hypercore
 - SDK method types: `node_modules/@nktkas/hyperliquid/esm/api/info/_methods/*.d.ts`
-- Real-world problems this tool targets: the "Why this exists" list in README.md
+- Real-world problems this tool targets: README.md "What it catches"
 
 ## Core principles
 - Pure checks take plain snapshots and return `Finding[]`; only `src/fetch.ts` touches the network.
