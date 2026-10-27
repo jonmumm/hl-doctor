@@ -19,7 +19,7 @@ Read-only: it only calls Hyperliquid's public info API and the public HyperEVM R
 These come from the questions developers ask most in the Hyperliquid builders Discord.
 
 **For an address**
-- No HyperCore account yet (and the 1 USDC activation fee for transfers to a new address)
+- No HyperCore account yet (and the 1 USDC activation fee for transfers to a new address), or the account is on the other network (testnet vs mainnet)
 - API (agent) wallets and sub-accounts, pointing you at the account that actually holds funds
 - Funds sent from HyperEVM stuck in EVM escrow
 - Testnet faucet won't drip: no mainnet deposit from this address

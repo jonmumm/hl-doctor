@@ -86,6 +86,15 @@ export const fetchAddressSnapshot = async (network: Network, address: Hex, ep = 
   };
 };
 
+/** Whether HyperCore has an account (of any role) for this address on this network; false if the lookup fails. */
+export const hasCoreAccount = async (network: Network, address: Hex, ep = DEFAULT_ENDPOINTS): Promise<boolean> => {
+  try {
+    return (await info(network, ep).userRole({ user: address })).role !== "missing";
+  } catch {
+    return false;
+  }
+};
+
 export const fetchBuilderSnapshot = async (network: Network, user: Hex, builder: Hex, ep = DEFAULT_ENDPOINTS): Promise<BuilderSnapshot> => {
   const c = info(network, ep);
   const [approvedMaxFee, builderRole, builderAbstraction, perp] = await Promise.all([

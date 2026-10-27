@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { builderEligibility, diagnoseAddress, diagnoseBuilderApproval, describeAbstraction } from "./address.ts";
+import { activeElsewhere, builderEligibility, diagnoseAddress, diagnoseBuilderApproval, describeAbstraction } from "./address.ts";
 import type { AddressSnapshot, BuilderSnapshot, Finding } from "./types.ts";
 
 const healthy: AddressSnapshot = {
@@ -243,5 +243,21 @@ describe("edge cases that must stay quiet", () => {
 describe("faucet check only on testnet", () => {
   it.each([true, false])("says nothing on mainnet even if mainnetDeposited=%s", (deposited) => {
     expect(find(diagnoseAddress(snap({ network: "mainnet", mainnetDeposited: deposited })), /faucet/)).toBeUndefined();
+  });
+});
+
+describe("activeElsewhere: an address with no account on the chosen network", () => {
+  it("warns to add --mainnet when the account is on mainnet", () => {
+    expect(activeElsewhere({ network: "testnet", elsewhere: true })).toEqual([
+      { severity: "warn", title: "This address is active on mainnet, not testnet", fix: "Re-run with --mainnet." },
+    ]);
+  });
+  it("warns to drop --mainnet when the account is on testnet", () => {
+    expect(activeElsewhere({ network: "mainnet", elsewhere: true })).toEqual([
+      { severity: "warn", title: "This address is active on testnet, not mainnet", fix: "Re-run without --mainnet." },
+    ]);
+  });
+  it("adds nothing when the other network has no account either", () => {
+    expect(activeElsewhere({ network: "testnet", elsewhere: false })).toEqual([]);
   });
 });

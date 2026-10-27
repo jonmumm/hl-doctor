@@ -1,10 +1,10 @@
 // The CLI as a function: argv in, output through `io`, exit code out. src/cli.ts wires it to the process.
 import { readFileSync } from "node:fs";
 import { z } from "zod";
-import { builderEligibility, describeAbstraction, diagnoseAddress, diagnoseBuilderApproval } from "./address.ts";
+import { activeElsewhere, builderEligibility, describeAbstraction, diagnoseAddress, diagnoseBuilderApproval } from "./address.ts";
 import { parseArgs, USAGE } from "./args.ts";
 import { classifyTx } from "./evmtx.ts";
-import { DEFAULT_ENDPOINTS, explorerTxUrl, fetchAddressSnapshot, fetchBuilderSnapshot, fetchCoreActivity, fetchEvmTx, type Endpoints } from "./fetch.ts";
+import { DEFAULT_ENDPOINTS, explorerTxUrl, fetchAddressSnapshot, fetchBuilderSnapshot, fetchCoreActivity, fetchEvmTx, hasCoreAccount, type Endpoints } from "./fetch.ts";
 import { renderReport, reportExitCode, reportJson, type Report, type Section } from "./render.ts";
 import { diagnoseTx, otherNetwork, txNotFound, txUsers } from "./tx.ts";
 import type { CoreActivity, Hex, Network } from "./types.ts";
@@ -28,7 +28,9 @@ interface AddressRequest {
 
 const doctorAddress = async ({ target, network, builder, asBuilder }: AddressRequest, ep: Endpoints): Promise<Report> => {
   const s = await fetchAddressSnapshot(network, target, ep);
-  const sections: Section[] = [{ heading: "Account", findings: diagnoseAddress(s) }];
+  // Only a missing account needs the other network; a failed lookup there just means no hint.
+  const elsewhere = s.role.role === "missing" && (await hasCoreAccount(otherNetwork(network), target, ep));
+  const sections: Section[] = [{ heading: "Account", findings: [...diagnoseAddress(s), ...activeElsewhere({ network, elsewhere })] }];
   if (builder) sections.push({ heading: `Builder ${builder}`, findings: diagnoseBuilderApproval(await fetchBuilderSnapshot(network, target, builder, ep)) });
   if (asBuilder) sections.push({ heading: "As a builder", findings: builderEligibility({ accountValue: s.perp.accountValue, abstraction: s.abstraction, role: s.role }) });
   const spot = s.spot.balances.map((b) => `${b.total} ${b.coin}`).join(", ") || "empty";

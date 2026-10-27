@@ -169,12 +169,15 @@ export const diagnoseTx = (p: {
 
 export const otherNetwork = (network: Network): Network => (network === "testnet" ? "mainnet" : "testnet");
 
+/** The fix for a target that lives on the other network. */
+export const rerunOnOther = (network: Network): string => (network === "testnet" ? "Re-run with --mainnet." : "Re-run without --mainnet.");
+
 // A hash that isn't a HyperEVM tx on this network: either it's on the other one, or it's a HyperCore tx.
 export const txNotFound = (p: { network: Network; elsewhere: boolean; explorerUrl: string }): Finding[] => {
   const other = otherNetwork(p.network);
   return [
     p.elsewhere
-      ? { severity: "warn", title: `This tx is on ${other}, not ${p.network}`, fix: `Re-run with${other === "mainnet" ? " --mainnet" : "out --mainnet"}.` }
+      ? { severity: "warn", title: `This tx is on ${other}, not ${p.network}`, fix: rerunOnOther(p.network) }
       : {
           severity: "info",
           title: `Not a HyperEVM tx on ${p.network}`,

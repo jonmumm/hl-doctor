@@ -1,5 +1,6 @@
 // Pure checks on an address snapshot. Each rule cites where its threshold comes from.
-import type { AddressSnapshot, BuilderSnapshot, Finding, Role } from "./types.ts";
+import { otherNetwork, rerunOnOther } from "./tx.ts";
+import type { AddressSnapshot, BuilderSnapshot, Finding, Network, Role } from "./types.ts";
 
 const ACTIVATION_FEE_USDC = 1; // preTransferCheck reports fee "1.0" for a transfer to a new address
 const BUILDER_MIN_PERP_VALUE = 100; // builder-codes docs
@@ -161,6 +162,10 @@ export const diagnoseAddress = (s: AddressSnapshot): Finding[] => [
   ...evmFindings(s),
   ...rateLimitFindings(s),
 ];
+
+// Mirrors txNotFound: the address has no account here, but the other network knows it.
+export const activeElsewhere = (p: { network: Network; elsewhere: boolean }): Finding[] =>
+  p.elsewhere ? [{ severity: "warn", title: `This address is active on ${otherNetwork(p.network)}, not ${p.network}`, fix: rerunOnOther(p.network) }] : [];
 
 export const builderEligibility = (b: { accountValue: number; abstraction: string; role: Role }): Finding[] => {
   if (b.role.role === "missing") {
