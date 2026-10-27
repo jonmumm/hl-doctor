@@ -6,7 +6,9 @@
     "src/tx.ts",
     "src/corewriter.ts",
     "src/evmtx.ts",
-    "src/fetch.ts"
+    "src/fetch.ts",
+    "src/args.ts",
+    "src/render.ts"
   ],
   "reporters": [
     "clear-text",
