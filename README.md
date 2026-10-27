@@ -6,7 +6,11 @@ Explains why money or actions didn't land on Hyperliquid's HyperCore.
 npx hl-doctor <address>            # account health on testnet
 npx hl-doctor <evm tx hash>        # what a HyperEVM tx did (or didn't do) on HyperCore
 npx hl-doctor <address> --mainnet  # same, on mainnet
+npx hl-doctor <address> --json     # { target, network, sections: [{ heading, findings }] }
+npx hl-doctor --help               # all options and examples
 ```
+
+Options: `--mainnet`, `--builder <address>`, `--as-builder`, `--json`, `-h/--help`, `-v/--version`. Unknown options and malformed addresses are rejected with exit code 2.
 
 Read-only: it only calls Hyperliquid's public info API and the public HyperEVM RPC. No private key, no wallet connection.
 
@@ -33,7 +37,7 @@ These come from the questions developers ask most in the Hyperliquid builders Di
 - Finds the effect on HyperCore: the matching order and why it was rejected (`perpMarginRejected`, `tickRejected`, `minTradeNtlRejected`, …), the ledger entry for transfers, or the escrow
 - Catches the classic silent no-op: the contract that emitted the action has no HyperCore account of its own
 
-Exit code is 1 when any check fails, so it works in CI.
+Exit code is 1 when any check fails, so it works in CI (`--json` keeps the same exit codes).
 
 ## Development
 
@@ -43,6 +47,6 @@ pnpm verify          # typecheck, tests, CRAP < 8, build
 pnpm test:mutate     # Stryker mutation testing
 ```
 
-Pure checks live in `src/{address,tx,corewriter,evmtx}.ts`; the network seam is `src/fetch.ts`. Seam tests replay recorded API responses from `src/__fixtures__/`. Re-record with `HL_RECORD=1 pnpm vitest run src/fetch.seam.test.ts`.
+Pure checks live in `src/{address,tx,corewriter,evmtx}.ts` and argument parsing in `src/args.ts`; the network seam is `src/fetch.ts`, and `src/main.ts` is the whole CLI as a function. Seam tests replay recorded API responses from `src/__fixtures__/`. Re-record with `HL_RECORD=1 pnpm vitest run src/fetch.seam.test.ts src/main.seam.test.ts`.
 
 Not affiliated with Hyperliquid. Some rules are inferred where the docs are silent (for example, that `userAbstraction: "disabled"` means Manual / Standard mode); the output says so when it relies on one.
