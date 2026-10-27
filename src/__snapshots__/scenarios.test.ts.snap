@@ -1,0 +1,754 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`address findings > RPC down 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "HyperCore account exists on testnet",
+  },
+  {
+    "severity": "ok",
+    "title": "Testnet faucet: eligible (mainnet deposit found)",
+  },
+  {
+    "severity": "info",
+    "title": "HyperEVM RPC unreachable: EVM checks skipped",
+  },
+]
+`;
+
+exports[`address findings > USDC stranded on spot 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "HyperCore account exists on testnet",
+  },
+  {
+    "severity": "ok",
+    "title": "Testnet faucet: eligible (mainnet deposit found)",
+  },
+  {
+    "detail": "In Manual / Standard mode spot and perps keep separate balances.",
+    "fix": "Move USDC from spot to perps (usdClassTransfer, or Transfer in the web app).",
+    "severity": "warn",
+    "title": "USDC is on spot (50) but perps has nothing to trade with",
+  },
+  {
+    "detail": "Small blocks have a 3M gas limit. Larger deploys fail with "exceeds block gas limit".",
+    "fix": "To deploy big contracts, send the HyperCore action {"type":"evmUserModify","usingBigBlocks":true} (the address must be a HyperCore user).",
+    "severity": "info",
+    "title": "HyperEVM: small blocks only",
+  },
+]
+`;
+
+exports[`address findings > agent 1`] = `
+[
+  {
+    "detail": "Agent wallets sign orders for another account and hold no funds of their own.",
+    "fix": "Run the doctor on the account it trades for: 0xabc0000000000000000000000000000000000001",
+    "severity": "warn",
+    "title": "This is an API (agent) wallet",
+  },
+  {
+    "severity": "ok",
+    "title": "Testnet faucet: eligible (mainnet deposit found)",
+  },
+  {
+    "detail": "Small blocks have a 3M gas limit. Larger deploys fail with "exceeds block gas limit".",
+    "fix": "To deploy big contracts, send the HyperCore action {"type":"evmUserModify","usingBigBlocks":true} (the address must be a HyperCore user).",
+    "severity": "info",
+    "title": "HyperEVM: small blocks only",
+  },
+]
+`;
+
+exports[`address findings > big blocks 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "HyperCore account exists on testnet",
+  },
+  {
+    "severity": "ok",
+    "title": "Testnet faucet: eligible (mainnet deposit found)",
+  },
+  {
+    "severity": "ok",
+    "title": "HyperEVM: big blocks enabled (30M gas)",
+  },
+]
+`;
+
+exports[`address findings > brand new address 1`] = `
+[
+  {
+    "detail": "HyperCore has never seen this address: no deposit, transfer or trade.",
+    "fix": "An account is created by its first deposit or incoming transfer. A transfer from another HyperCore account pays a 1 USDC activation fee.",
+    "severity": "error",
+    "title": "No HyperCore account on testnet",
+  },
+  {
+    "detail": "These funds were sent from HyperEVM but there is no HyperCore account to credit, so they wait in escrow.",
+    "fix": "Activate the HyperCore account (a deposit, or a transfer from an existing account), then check again.",
+    "severity": "warn",
+    "title": "0.02 HYPE stuck in EVM escrow",
+  },
+  {
+    "detail": "The 1,000 mock USDC drip requires the same address to have deposited on mainnet.",
+    "fix": "Ask someone with testnet USDC to send it to you (usdSend), or use an address that has deposited on mainnet.",
+    "severity": "warn",
+    "title": "Testnet faucet won't drip: no mainnet deposit from this address",
+  },
+  {
+    "detail": "Any HyperEVM transaction, including moving tokens to HyperCore, needs HYPE for gas.",
+    "severity": "info",
+    "title": "No HYPE on HyperEVM",
+  },
+  {
+    "detail": "Small blocks have a 3M gas limit. Larger deploys fail with "exceeds block gas limit".",
+    "fix": "To deploy big contracts, send the HyperCore action {"type":"evmUserModify","usingBigBlocks":true} (the address must be a HyperCore user).",
+    "severity": "info",
+    "title": "HyperEVM: small blocks only",
+  },
+]
+`;
+
+exports[`address findings > escrow on an existing account 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "HyperCore account exists on testnet",
+  },
+  {
+    "detail": "These funds were sent from HyperEVM and have not been credited to the spot balance yet.",
+    "fix": "Escrow normally clears within seconds. If it has been minutes, open a ticket in the Hyperliquid Discord with the EVM tx hash.",
+    "severity": "warn",
+    "title": "3 USDC stuck in EVM escrow",
+  },
+  {
+    "severity": "ok",
+    "title": "Testnet faucet: eligible (mainnet deposit found)",
+  },
+  {
+    "detail": "Small blocks have a 3M gas limit. Larger deploys fail with "exceeds block gas limit".",
+    "fix": "To deploy big contracts, send the HyperCore action {"type":"evmUserModify","usingBigBlocks":true} (the address must be a HyperCore user).",
+    "severity": "info",
+    "title": "HyperEVM: small blocks only",
+  },
+]
+`;
+
+exports[`address findings > healthy 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "HyperCore account exists on testnet",
+  },
+  {
+    "severity": "ok",
+    "title": "Testnet faucet: eligible (mainnet deposit found)",
+  },
+  {
+    "detail": "Small blocks have a 3M gas limit. Larger deploys fail with "exceeds block gas limit".",
+    "fix": "To deploy big contracts, send the HyperCore action {"type":"evmUserModify","usingBigBlocks":true} (the address must be a HyperCore user).",
+    "severity": "info",
+    "title": "HyperEVM: small blocks only",
+  },
+]
+`;
+
+exports[`address findings > no gas for Core→EVM 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "HyperCore account exists on testnet",
+  },
+  {
+    "severity": "ok",
+    "title": "Testnet faucet: eligible (mainnet deposit found)",
+  },
+  {
+    "detail": "Sending tokens from HyperCore to HyperEVM costs 200k gas, paid from spot HYPE or USDC.",
+    "fix": "Keep a little HYPE or USDC on spot before transferring.",
+    "severity": "warn",
+    "title": "No HYPE or USDC on spot to pay gas for Core→EVM transfers",
+  },
+  {
+    "detail": "Small blocks have a 3M gas limit. Larger deploys fail with "exceeds block gas limit".",
+    "fix": "To deploy big contracts, send the HyperCore action {"type":"evmUserModify","usingBigBlocks":true} (the address must be a HyperCore user).",
+    "severity": "info",
+    "title": "HyperEVM: small blocks only",
+  },
+]
+`;
+
+exports[`address findings > rate limit 80% 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "HyperCore account exists on testnet",
+  },
+  {
+    "severity": "ok",
+    "title": "Testnet faucet: eligible (mainnet deposit found)",
+  },
+  {
+    "detail": "Small blocks have a 3M gas limit. Larger deploys fail with "exceeds block gas limit".",
+    "fix": "To deploy big contracts, send the HyperCore action {"type":"evmUserModify","usingBigBlocks":true} (the address must be a HyperCore user).",
+    "severity": "info",
+    "title": "HyperEVM: small blocks only",
+  },
+  {
+    "detail": "8500 of 10000 address requests used (10,000 buffer + 1 per USDC traded).",
+    "severity": "warn",
+    "title": "Address rate limit above 80%",
+  },
+]
+`;
+
+exports[`address findings > rate limited 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "HyperCore account exists on testnet",
+  },
+  {
+    "severity": "ok",
+    "title": "Testnet faucet: eligible (mainnet deposit found)",
+  },
+  {
+    "detail": "Small blocks have a 3M gas limit. Larger deploys fail with "exceeds block gas limit".",
+    "fix": "To deploy big contracts, send the HyperCore action {"type":"evmUserModify","usingBigBlocks":true} (the address must be a HyperCore user).",
+    "severity": "info",
+    "title": "HyperEVM: small blocks only",
+  },
+  {
+    "detail": "10000 of 10000 address requests used (10,000 buffer + 1 per USDC traded).",
+    "fix": "While limited, the address gets one request every 10 seconds (cancels have a higher cap). Trading volume raises the budget.",
+    "severity": "error",
+    "title": "Address rate limit reached",
+  },
+]
+`;
+
+exports[`address findings > restricted 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "HyperCore account exists on testnet",
+  },
+  {
+    "detail": "legalCheck reports userAllowed: false for this address.",
+    "severity": "error",
+    "title": "Address is restricted",
+  },
+  {
+    "severity": "ok",
+    "title": "Testnet faucet: eligible (mainnet deposit found)",
+  },
+  {
+    "detail": "Small blocks have a 3M gas limit. Larger deploys fail with "exceeds block gas limit".",
+    "fix": "To deploy big contracts, send the HyperCore action {"type":"evmUserModify","usingBigBlocks":true} (the address must be a HyperCore user).",
+    "severity": "info",
+    "title": "HyperEVM: small blocks only",
+  },
+]
+`;
+
+exports[`address findings > sub-account 1`] = `
+[
+  {
+    "detail": "Master account: 0xabc0000000000000000000000000000000000002",
+    "severity": "info",
+    "title": "This is a sub-account",
+  },
+  {
+    "severity": "ok",
+    "title": "Testnet faucet: eligible (mainnet deposit found)",
+  },
+  {
+    "detail": "Small blocks have a 3M gas limit. Larger deploys fail with "exceeds block gas limit".",
+    "fix": "To deploy big contracts, send the HyperCore action {"type":"evmUserModify","usingBigBlocks":true} (the address must be a HyperCore user).",
+    "severity": "info",
+    "title": "HyperEVM: small blocks only",
+  },
+]
+`;
+
+exports[`address findings > terms not accepted 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "HyperCore account exists on testnet",
+  },
+  {
+    "detail": "The app asks once per address before it lets you trade or claim the faucet.",
+    "severity": "info",
+    "title": "Terms not accepted in the testnet web app",
+  },
+  {
+    "severity": "ok",
+    "title": "Testnet faucet: eligible (mainnet deposit found)",
+  },
+  {
+    "detail": "Small blocks have a 3M gas limit. Larger deploys fail with "exceeds block gas limit".",
+    "fix": "To deploy big contracts, send the HyperCore action {"type":"evmUserModify","usingBigBlocks":true} (the address must be a HyperCore user).",
+    "severity": "info",
+    "title": "HyperEVM: small blocks only",
+  },
+]
+`;
+
+exports[`address findings > vault 1`] = `
+[
+  {
+    "severity": "info",
+    "title": "This is a vault",
+  },
+  {
+    "detail": "Small blocks have a 3M gas limit. Larger deploys fail with "exceeds block gas limit".",
+    "fix": "To deploy big contracts, send the HyperCore action {"type":"evmUserModify","usingBigBlocks":true} (the address must be a HyperCore user).",
+    "severity": "info",
+    "title": "HyperEVM: small blocks only",
+  },
+]
+`;
+
+exports[`builder findings > approval approved 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "User approved builder up to 2.5 bp (0.025%)",
+  },
+  {
+    "severity": "ok",
+    "title": "Builder perps value 220 USDC (≥ 100 USDC)",
+  },
+  {
+    "severity": "ok",
+    "title": "Builder is in standard mode",
+  },
+]
+`;
+
+exports[`builder findings > approval not approved 1`] = `
+[
+  {
+    "detail": "Orders that carry this builder code will be rejected.",
+    "fix": "The user signs ApproveBuilderFee with their main wallet, not an agent/API wallet. Caps: 0.1% perps, 1% spot.",
+    "severity": "error",
+    "title": "User has not approved this builder",
+  },
+  {
+    "severity": "ok",
+    "title": "Builder perps value 220 USDC (≥ 100 USDC)",
+  },
+  {
+    "severity": "ok",
+    "title": "Builder is in standard mode",
+  },
+]
+`;
+
+exports[`builder findings > eligible 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "Builder perps value 150 USDC (≥ 100 USDC)",
+  },
+  {
+    "severity": "ok",
+    "title": "Builder is in standard mode",
+  },
+]
+`;
+
+exports[`builder findings > missing 1`] = `
+[
+  {
+    "fix": "Deposit at least 100 USDC into its perps balance.",
+    "severity": "error",
+    "title": "Builder has no HyperCore account",
+  },
+]
+`;
+
+exports[`builder findings > too small 1`] = `
+[
+  {
+    "fix": "Builder codes require at least 100 USDC of perps account value. Spot balances don't count in standard mode.",
+    "severity": "error",
+    "title": "Builder perps value 20 USDC is below 100 USDC",
+  },
+  {
+    "severity": "ok",
+    "title": "Builder is in standard mode",
+  },
+]
+`;
+
+exports[`builder findings > unified 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "Builder perps value 150 USDC (≥ 100 USDC)",
+  },
+  {
+    "detail": "Builder code addresses must be in Manual / Standard mode to accrue fees.",
+    "fix": "Switch the builder address to Manual / Standard (top right of the perps order form, or the Portfolio page).",
+    "severity": "error",
+    "title": "Builder is in Unified account mode, not standard mode",
+  },
+]
+`;
+
+exports[`builder findings > unknown mode 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "Builder perps value 150 USDC (≥ 100 USDC)",
+  },
+  {
+    "fix": "Set Manual / Standard explicitly in the web app to be sure.",
+    "severity": "warn",
+    "title": "Can't confirm standard mode (API reports "default")",
+  },
+]
+`;
+
+exports[`tx findings > HYPE escrowed, account exists 1`] = `
+[
+  {
+    "detail": "The funds are in escrow and not yet in the spot balance.",
+    "fix": "Escrow normally clears within seconds. If not, open a Discord ticket with this tx hash.",
+    "severity": "warn",
+    "title": "0.02 HYPE waiting in EVM escrow",
+  },
+]
+`;
+
+exports[`tx findings > HYPE escrowed, no account 1`] = `
+[
+  {
+    "detail": "HyperCore credits EVM→Core transfers to the same address on HyperCore. That address has no HyperCore account, so the funds sit in escrow.",
+    "fix": "Activate the HyperCore account, then check again.",
+    "severity": "error",
+    "title": "0.02 HYPE waiting in EVM escrow",
+  },
+]
+`;
+
+exports[`tx findings > HYPE sent, no account, no escrow 1`] = `
+[
+  {
+    "detail": "HyperCore credits EVM→Core transfers to the same address on HyperCore. That address has no HyperCore account, so the funds sit in escrow.",
+    "fix": "Activate the HyperCore account, then check again.",
+    "severity": "error",
+    "title": "1 HYPE sent, but the sender has no HyperCore account",
+  },
+]
+`;
+
+exports[`tx findings > delegate 1`] = `
+[
+  {
+    "detail": "tokenDelegate(validator=0x1 wei=1 isUndelegate=true)",
+    "severity": "info",
+    "title": "tokenDelegate: decoded, effect not verified",
+  },
+]
+`;
+
+exports[`tx findings > no HyperCore interaction 1`] = `
+[
+  {
+    "detail": "No CoreWriter action, no HYPE sent to 0x2222…, no token sent to a 0x20… system address.",
+    "severity": "info",
+    "title": "No HyperCore interaction in this tx",
+  },
+]
+`;
+
+exports[`tx findings > order badAloPxRejected 1`] = `
+[
+  {
+    "detail": "A post-only (Alo) order would have crossed the book.",
+    "fix": undefined,
+    "severity": "error",
+    "title": "BTC order rejected (badAloPxRejected)",
+  },
+]
+`;
+
+exports[`tx findings > order filled 1`] = `
+[
+  {
+    "detail": "oid 9",
+    "severity": "ok",
+    "title": "BTC order filled",
+  },
+]
+`;
+
+exports[`tx findings > order insufficientSpotBalanceRejected 1`] = `
+[
+  {
+    "detail": "Not enough spot balance for this order.",
+    "fix": undefined,
+    "severity": "error",
+    "title": "BTC order rejected (insufficientSpotBalanceRejected)",
+  },
+]
+`;
+
+exports[`tx findings > order iocCancelRejected 1`] = `
+[
+  {
+    "detail": "An IOC order found nothing to fill against at that price.",
+    "fix": undefined,
+    "severity": "error",
+    "title": "BTC order rejected (iocCancelRejected)",
+  },
+]
+`;
+
+exports[`tx findings > order marginCanceled 1`] = `
+[
+  {
+    "detail": "oid 9",
+    "severity": "warn",
+    "title": "BTC order marginCanceled",
+  },
+]
+`;
+
+exports[`tx findings > order marketOrderNoLiquidityRejected 1`] = `
+[
+  {
+    "detail": "No liquidity to fill a market order.",
+    "fix": undefined,
+    "severity": "error",
+    "title": "BTC order rejected (marketOrderNoLiquidityRejected)",
+  },
+]
+`;
+
+exports[`tx findings > order minTradeNtlRejected 1`] = `
+[
+  {
+    "detail": "The order is below the $10 minimum notional.",
+    "fix": undefined,
+    "severity": "error",
+    "title": "BTC order rejected (minTradeNtlRejected)",
+  },
+]
+`;
+
+exports[`tx findings > order missing, everything plausible 1`] = `
+[
+  {
+    "detail": "HyperCore shows no order from this account after the tx. Likely causes:
+- the price or size was not scaled by 10^8 or was off-tick.",
+    "fix": "CoreWriter limitPx and sz are 10^8 × the human value, and the price must still fit the tick (5 significant figures, ≤ 6 - szDecimals decimals).",
+    "severity": "error",
+    "title": "No matching order on HyperCore for BTC",
+  },
+]
+`;
+
+exports[`tx findings > order missing, no margin and bad asset 1`] = `
+[
+  {
+    "detail": "HyperCore shows no order from this account after the tx. Likely causes:
+- asset 9999 is not a perp market on this network (spot pairs are 10000 + index).
+- perps withdrawable is 0, so there is no margin for a new order.
+- the price or size was not scaled by 10^8 or was off-tick.",
+    "fix": "CoreWriter limitPx and sz are 10^8 × the human value, and the price must still fit the tick (5 significant figures, ≤ 6 - szDecimals decimals).",
+    "severity": "error",
+    "title": "No matching order on HyperCore for asset 9999",
+  },
+]
+`;
+
+exports[`tx findings > order open 1`] = `
+[
+  {
+    "detail": "oid 9",
+    "severity": "ok",
+    "title": "BTC order open",
+  },
+]
+`;
+
+exports[`tx findings > order openInterestIncreaseRejected 1`] = `
+[
+  {
+    "detail": "The market is at its open interest cap.",
+    "fix": undefined,
+    "severity": "error",
+    "title": "BTC order rejected (openInterestIncreaseRejected)",
+  },
+]
+`;
+
+exports[`tx findings > order oracleRejected 1`] = `
+[
+  {
+    "detail": "The price is too far from the oracle price.",
+    "fix": undefined,
+    "severity": "error",
+    "title": "BTC order rejected (oracleRejected)",
+  },
+]
+`;
+
+exports[`tx findings > order perpMarginRejected 1`] = `
+[
+  {
+    "detail": "Not enough margin in the perps account for this order.",
+    "fix": undefined,
+    "severity": "error",
+    "title": "BTC order rejected (perpMarginRejected)",
+  },
+]
+`;
+
+exports[`tx findings > order perpMaxPositionRejected 1`] = `
+[
+  {
+    "detail": "The order would exceed the maximum position size.",
+    "fix": undefined,
+    "severity": "error",
+    "title": "BTC order rejected (perpMaxPositionRejected)",
+  },
+]
+`;
+
+exports[`tx findings > order queued 1`] = `
+[
+  {
+    "detail": "CoreWriter orders are delayed a few seconds before HyperCore runs them. Check again shortly.",
+    "severity": "info",
+    "title": "Order may still be queued",
+  },
+]
+`;
+
+exports[`tx findings > order reduceOnlyRejected 1`] = `
+[
+  {
+    "detail": "Reduce-only order would have increased the position.",
+    "fix": undefined,
+    "severity": "error",
+    "title": "BTC order rejected (reduceOnlyRejected)",
+  },
+]
+`;
+
+exports[`tx findings > order rejected 1`] = `
+[
+  {
+    "detail": "HyperCore rejected the order.",
+    "fix": undefined,
+    "severity": "error",
+    "title": "BTC order rejected (rejected)",
+  },
+]
+`;
+
+exports[`tx findings > order tickRejected 1`] = `
+[
+  {
+    "detail": "The price is not a multiple of the tick size.",
+    "fix": "CoreWriter limitPx and sz are 10^8 × the human value, and the price must still fit the tick (5 significant figures, ≤ 6 - szDecimals decimals).",
+    "severity": "error",
+    "title": "BTC order rejected (tickRejected)",
+  },
+]
+`;
+
+exports[`tx findings > order tooManyOpenOrdersRejected 1`] = `
+[
+  {
+    "detail": "The account has too many open orders.",
+    "fix": undefined,
+    "severity": "error",
+    "title": "BTC order rejected (tooManyOpenOrdersRejected)",
+  },
+]
+`;
+
+exports[`tx findings > reverted 1`] = `
+[
+  {
+    "detail": "A precompile called with an invalid asset or vault reverts and consumes all the gas passed to it. Check the revert reason in an explorer.",
+    "severity": "error",
+    "title": "The EVM tx reverted, so HyperCore never saw it",
+  },
+]
+`;
+
+exports[`tx findings > sendAsset landed 1`] = `
+[
+  {
+    "detail": "sendAsset(destination=0x1 token=0 amountWei=1)",
+    "severity": "ok",
+    "title": "sendAsset: landed on HyperCore (send)",
+  },
+]
+`;
+
+exports[`tx findings > sendAsset missing 1`] = `
+[
+  {
+    "detail": "sendAsset(destination=0x1 token=0 amountWei=1)
+The EVM tx succeeded, but HyperCore checks the action when it runs it. Likely causes:
+- not enough balance of that token on the sending HyperCore account
+- the destination has no HyperCore account (sending to a new address costs a 1 USDC activation fee)
+- wrong token index or dex",
+    "severity": "warn",
+    "title": "sendAsset: nothing landed on HyperCore",
+  },
+]
+`;
+
+exports[`tx findings > sendAsset queued 1`] = `
+[
+  {
+    "detail": "sendAsset(destination=0x1 token=0 amountWei=1)",
+    "severity": "info",
+    "title": "sendAsset: may still be queued",
+  },
+]
+`;
+
+exports[`tx findings > sender has no account 1`] = `
+[
+  {
+    "detail": "CoreWriter actions run as the address that emitted them (0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2). If that's a contract, it is not the wallet that sent the tx: the contract needs its own HyperCore account, or HyperCore drops the action. Action: limitOrder(asset=0 isBuy=true limitPx=75000 sz=0.001 reduceOnly=false tif=Gtc cloid=0)",
+    "fix": "Activate the contract's HyperCore account first (send it USDC or HYPE on HyperCore).",
+    "severity": "error",
+    "title": "0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2 has no HyperCore account",
+  },
+]
+`;
+
+exports[`tx findings > token arrived 1`] = `
+[
+  {
+    "severity": "ok",
+    "title": "5 of token 200 (raw units) reached HyperCore (no escrow)",
+  },
+]
+`;
+
+exports[`tx findings > undecodable 1`] = `
+[
+  {
+    "detail": "unsupported version 2 (only 1 exists)",
+    "severity": "error",
+    "title": "CoreWriter action 7 could not be decoded",
+  },
+]
+`;

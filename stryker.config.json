@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "testRunner": "vitest",
+  "mutate": [
+    "src/perps.ts",
+    "src/address.ts",
+    "src/tx.ts",
+    "src/corewriter.ts",
+    "src/evmtx.ts",
+    "src/fetch.ts"
+  ],
+  "reporters": [
+    "clear-text",
+    "progress"
+  ],
+  "coverageAnalysis": "perTest",
+  "tsconfigFile": "tsconfig.no-references.json",
+  "disableTypeChecks": false,
+  "plugins": [
+    "@stryker-mutator/vitest-runner"
+  ]
+}

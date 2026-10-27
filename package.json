@@ -1,0 +1,58 @@
+{
+  "name": "hl-doctor",
+  "version": "0.1.0",
+  "description": "Explains why money or actions didn't land on Hyperliquid's HyperCore: stuck escrows, CoreWriter no-ops, order rejections, builder-code eligibility. Read-only; no keys.",
+  "keywords": [
+    "hyperliquid",
+    "hypercore",
+    "hyperevm",
+    "corewriter",
+    "testnet",
+    "debugging",
+    "cli"
+  ],
+  "license": "MIT",
+  "author": "Jonathan Mumm",
+  "type": "module",
+  "bin": {
+    "hl-doctor": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.test.js",
+    "!dist/replay-server.js",
+    "!dist/__fixtures__",
+    "!dist/__snapshots__",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && chmod +x dist/cli.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:mutate": "stryker run",
+    "test:mutate:incremental": "stryker run --incremental",
+    "crap": "vitest run --coverage --silent && node tools/crap.mjs --coverage coverage/coverage-final.json --threshold 7.99",
+    "verify": "pnpm typecheck && pnpm test && pnpm crap && pnpm build",
+    "prepublishOnly": "pnpm verify",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@nktkas/hyperliquid": "0.33.3",
+    "viem": "^2.57.12",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@stryker-mutator/core": "^10.1.1",
+    "@stryker-mutator/vitest-runner": "^10.1.1",
+    "@types/node": "^26.6.5",
+    "@vitest/coverage-v8": "^5.0.5",
+    "husky": "^9.1.7",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}
