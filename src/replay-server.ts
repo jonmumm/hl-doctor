@@ -50,6 +50,18 @@ const listen = async (handle: (path: string, contentType: string | undefined, bo
   return { server, endpoints };
 };
 
+// The public endpoints throttle bursts; a throttled reply must never be saved as a fixture.
+const isThrottled = (r: { status: number; body: string }) => r.status === 429 || r.body.includes("rate limited");
+
+export const fetchUpstream = async (target: string, body: string, backoffMs = 2_000) => {
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch(target, { method: "POST", headers: { "content-type": "application/json" }, body });
+    const r = { status: res.status, body: await res.text() };
+    if (!isThrottled(r) || attempt === 6) return r;
+    await new Promise((done) => setTimeout(done, backoffMs * 2 ** attempt));
+  }
+};
+
 export interface ReplayServer {
   endpoints: Endpoints;
   /** Requests that had no recording, so tests can fail loudly instead of hanging on the network. */
@@ -63,10 +75,7 @@ export const startReplayServer = async (fixturePath: string, record = process.en
   const { server, endpoints } = await listen(async (path, _contentType, body) => {
     const key = keyFor(path, body);
     const target = upstream(path);
-    if (record && target) {
-      const r = await fetch(target, { method: "POST", headers: { "content-type": "application/json" }, body });
-      fixture[key] = { status: r.status, body: await r.text() };
-    }
+    if (record && target) fixture[key] = await fetchUpstream(target, body);
     return fixture[key] ?? null;
   }, misses);
   return {

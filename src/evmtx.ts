@@ -5,7 +5,7 @@ import { CORE_WRITER, decodeRawActionLog, RAW_ACTION_TOPIC } from "./corewriter.
 import type { EvmEvent, EvmLog, EvmTx, Hex } from "./types.ts";
 
 export const HYPE_SYSTEM_ADDRESS: Hex = "0x2222222222222222222222222222222222222222";
-const TRANSFER_TOPIC = keccak256(toHex("Transfer(address,address,uint256)"));
+export const TRANSFER_TOPIC = keccak256(toHex("Transfer(address,address,uint256)"));
 
 /** Token system addresses are 0x20, zeros, then the token index in the low bytes. */
 export const systemAddressTokenIndex = (address: Hex): number | null => {

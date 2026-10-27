@@ -37,6 +37,7 @@
     "test:mutate": "stryker run",
     "test:mutate:incremental": "stryker run --incremental",
     "crap": "vitest run --coverage --silent && node tools/crap.mjs --coverage coverage/coverage-final.json --threshold 7.99",
+    "find-cases": "node scripts/find-cases.ts",
     "verify": "pnpm typecheck && pnpm test && pnpm crap && pnpm build",
     "prepublishOnly": "pnpm verify",
     "prepare": "husky"
