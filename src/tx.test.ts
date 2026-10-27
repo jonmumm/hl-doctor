@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { diagnoseTx } from "./tx.ts";
+import { diagnoseTx, otherNetwork, txNotFound, txUsers } from "./tx.ts";
 import type { CoreActivity, DecodedAction, EvmEvent, EvmTx, Finding } from "./types.ts";
 
 const USER = "0xb2308b58a6dfe69f3d46e4cc0c354f6ad5277ca2";
@@ -229,5 +229,50 @@ describe("EVM → Core transfer edge cases", () => {
   it("counts any escrowed coin for a token transfer", () => {
     const token: EvmEvent = { kind: "tokenToCore", from: USER, token: "0x1111111111111111111111111111111111111111", tokenIndex: 200, amount: 5n };
     expect(find(run([token], activity({ evmEscrows: [{ coin: "PURR", total: 5 }] })), /escrow/)?.severity).toBe("warn");
+  });
+});
+
+describe("txNotFound", () => {
+  const url = "https://explorer/tx/0xbb";
+  it("warns to switch to mainnet when the tx is on mainnet", () => {
+    expect(txNotFound({ network: "testnet", elsewhere: true, explorerUrl: url })).toEqual([
+      { severity: "warn", title: "This tx is on mainnet, not testnet", fix: "Re-run with --mainnet." },
+    ]);
+  });
+  it("warns to drop --mainnet when the tx is on testnet", () => {
+    expect(txNotFound({ network: "mainnet", elsewhere: true, explorerUrl: url })).toEqual([
+      { severity: "warn", title: "This tx is on testnet, not mainnet", fix: "Re-run without --mainnet." },
+    ]);
+  });
+  it("points at the HyperCore explorer when the tx is on neither network", () => {
+    expect(txNotFound({ network: "testnet", elsewhere: false, explorerUrl: url })).toEqual([
+      {
+        severity: "info",
+        title: "Not a HyperEVM tx on testnet",
+        detail: "It may be a HyperCore (L1) tx hash, or not mined yet.",
+        fix: `Open it in the HyperCore explorer: ${url}`,
+      },
+    ]);
+  });
+});
+
+describe("otherNetwork", () => {
+  it("swaps testnet and mainnet", () => {
+    expect(otherNetwork("testnet")).toBe("mainnet");
+    expect(otherNetwork("mainnet")).toBe("testnet");
+  });
+});
+
+describe("txUsers", () => {
+  it("collects each distinct lowercased CoreWriter user and transfer sender", () => {
+    const events: EvmEvent[] = [
+      { kind: "coreWriter", user: "0xAbCdEf0000000000000000000000000000000001", action: order() },
+      { kind: "hypeToCore", from: "0xabcdef0000000000000000000000000000000001", amountWei: 1n },
+      { kind: "tokenToCore", from: "0x00000000000000000000000000000000000000FF", token: "0x1111111111111111111111111111111111111111", tokenIndex: 1, amount: 1n },
+    ];
+    expect(txUsers(events)).toEqual(["0xabcdef0000000000000000000000000000000001", "0x00000000000000000000000000000000000000ff"]);
+  });
+  it("is empty when there are no events", () => {
+    expect(txUsers([])).toEqual([]);
   });
 });

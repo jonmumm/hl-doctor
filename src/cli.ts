@@ -10,12 +10,11 @@ import { builderEligibility, diagnoseAddress, diagnoseBuilderApproval, describeA
 import { classifyTx } from "./evmtx.ts";
 import { explorerTxUrl, fetchAddressSnapshot, fetchBuilderSnapshot, fetchCoreActivity, fetchEvmTx } from "./fetch.ts";
 import { exitCode, renderFindings } from "./render.ts";
-import { diagnoseTx } from "./tx.ts";
+import { diagnoseTx, otherNetwork, txNotFound, txUsers } from "./tx.ts";
 import type { CoreActivity, Finding, Hex, Network } from "./types.ts";
 
 const Address = z.custom<Hex>((v) => typeof v === "string" && /^0x[0-9a-fA-F]{40}$/.test(v), "expected a 0x address");
 const TxHash = z.custom<Hex>((v) => typeof v === "string" && /^0x[0-9a-fA-F]{64}$/.test(v), "expected a 0x tx hash");
-const lower = (a: Hex): Hex => `0x${a.slice(2).toLowerCase()}`;
 
 const args = process.argv.slice(2);
 const flag = (name: string) => args.includes(name);
@@ -61,24 +60,14 @@ const doctorAddress = async (address: Hex) => {
 const doctorTx = async (hash: Hex) => {
   const found = await fetchEvmTx(network, hash);
   if (!found) {
-    const other: Network = network === "testnet" ? "mainnet" : "testnet";
-    const elsewhere = await fetchEvmTx(other, hash).catch(() => null);
-    const findings: Finding[] = [
-      elsewhere
-        ? { severity: "warn", title: `This tx is on ${other}, not ${network}`, fix: `Re-run with${other === "mainnet" ? " --mainnet" : "out --mainnet"}.` }
-        : {
-            severity: "info",
-            title: `Not a HyperEVM tx on ${network}`,
-            detail: "It may be a HyperCore (L1) tx hash, or not mined yet.",
-            fix: `Open it in the HyperCore explorer: ${explorerTxUrl(network, hash)}`,
-          },
-    ];
+    const elsewhere = await fetchEvmTx(otherNetwork(network), hash).catch(() => null);
+    const findings = txNotFound({ network, elsewhere: elsewhere !== null, explorerUrl: explorerTxUrl(network, hash) });
     print(`${hash} on ${network}`, findings);
     return findings;
   }
   const { tx, blockTime } = found;
   const events = classifyTx(tx);
-  const users = [...new Set(events.map((e) => lower(e.kind === "coreWriter" ? e.user : e.from)))];
+  const users = txUsers(events);
   const activity = new Map<Hex, CoreActivity>(
     await Promise.all(users.map(async (u): Promise<[Hex, CoreActivity]> => [u, await fetchCoreActivity(network, u, blockTime)])),
   );

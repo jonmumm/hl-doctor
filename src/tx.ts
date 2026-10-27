@@ -1,6 +1,6 @@
 // Pure checks: did each HyperCore-bound part of an EVM tx have the effect it should?
 import { formatUnits, numberToHex } from "viem";
-import type { CoreActivity, DecodedAction, EvmEvent, EvmTx, FieldValue, Finding, Hex } from "./types.ts";
+import type { CoreActivity, DecodedAction, EvmEvent, EvmTx, FieldValue, Finding, Hex, Network } from "./types.ts";
 
 const QUEUE_GRACE_MS = 10_000; // CoreWriter orders and vault transfers are delayed "a few seconds" (docs)
 const CLOCK_SKEW_MS = 1_000;
@@ -166,3 +166,25 @@ export const diagnoseTx = (p: {
     }
   });
 };
+
+export const otherNetwork = (network: Network): Network => (network === "testnet" ? "mainnet" : "testnet");
+
+// A hash that isn't a HyperEVM tx on this network: either it's on the other one, or it's a HyperCore tx.
+export const txNotFound = (p: { network: Network; elsewhere: boolean; explorerUrl: string }): Finding[] => {
+  const other = otherNetwork(p.network);
+  return [
+    p.elsewhere
+      ? { severity: "warn", title: `This tx is on ${other}, not ${p.network}`, fix: `Re-run with${other === "mainnet" ? " --mainnet" : "out --mainnet"}.` }
+      : {
+          severity: "info",
+          title: `Not a HyperEVM tx on ${p.network}`,
+          detail: "It may be a HyperCore (L1) tx hash, or not mined yet.",
+          fix: `Open it in the HyperCore explorer: ${p.explorerUrl}`,
+        },
+  ];
+};
+
+// The HyperCore accounts a tx touches: CoreWriter senders and EVM→Core transfer senders.
+export const txUsers = (events: EvmEvent[]): Hex[] => [
+  ...new Set(events.map((e): Hex => `0x${(e.kind === "coreWriter" ? e.user : e.from).slice(2).toLowerCase()}`)),
+];
