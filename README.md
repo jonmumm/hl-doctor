@@ -68,8 +68,6 @@ npm install -g hl-doctor
 pnpm add -g hl-doctor
 ```
 
-For anything security-sensitive, pin a version you've reviewed (`npx hl-doctor@0.1.0 …`). The [npm page](https://www.npmjs.com/package/hl-doctor) links back to this repository.
-
 From source:
 
 ```bash
