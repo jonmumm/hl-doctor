@@ -32,6 +32,7 @@ const rpc = async <T>(ep: Endpoints, network: Network, method: string, params: u
     body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
     signal: AbortSignal.timeout(10_000),
   });
+  if (!res.ok) throw new Error(`${method}: HTTP ${res.status} ${await res.text()}`);
   const body = RpcResponse.parse(await res.json());
   if ("error" in body) throw new Error(`${method}: ${body.error.message}`);
   return schema.parse(body.result);

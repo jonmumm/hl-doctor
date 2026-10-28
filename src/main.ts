@@ -16,6 +16,7 @@ import {
   hasCoreAccount,
   type Endpoints,
 } from "./fetch.ts";
+import { describeFailure } from "./failure.ts";
 import { diagnoseOrder, recentRejections } from "./orders.ts";
 import { renderReport, reportExitCode, reportJson, type Report, type Section } from "./render.ts";
 import { diagnoseTx, otherNetwork, txNotFound, txUsers } from "./tx.ts";
@@ -29,7 +30,7 @@ export interface Io {
 
 // package.json sits one level above both src/ and dist/.
 const packageVersion = () =>
-  z.object({ version: z.string() }).parse(JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"))).version;
+  z.object({ version: z.string() }).parse(JSON.parse(String(readFileSync(new URL("../package.json", import.meta.url))))).version;
 
 interface AddressRequest {
   target: Hex;
@@ -82,7 +83,12 @@ export const run = async (argv: string[], io: Io, ep = DEFAULT_ENDPOINTS, now = 
   if (args.kind === "help") return io.out(USAGE), 0;
   if (args.kind === "version") return io.out(packageVersion()), 0;
   if (args.kind === "error") return io.err(`hl-doctor: ${args.message}\nRun hl-doctor --help for usage.`), 2;
-  const report = args.kind === "address" ? await doctorAddress(args, ep, now) : await doctorTx(args.target, args.network, ep);
+  let report: Report;
+  try {
+    report = args.kind === "address" ? await doctorAddress(args, ep, now) : await doctorTx(args.target, args.network, ep);
+  } catch (error) {
+    return io.err(`hl-doctor: ${describeFailure(error, args.network)}`), 3;
+  }
   io.out(args.json ? reportJson(report) : renderReport(report, io.color));
   return reportExitCode(report);
 };

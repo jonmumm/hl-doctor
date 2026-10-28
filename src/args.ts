@@ -30,7 +30,8 @@ Examples:
   hl-doctor 0x90f8bf6a479f320ead074411a4b0e7944ea8c9c1 --order 63367351019
   hl-doctor 0xbda23c808243e1ba530c4035f4188bb6d63cb32c6a24a9e8d976d3201dafa24a
 
-Exit code: 0 when no check fails, 1 when one does, 2 for a usage error.`;
+Exit code: 0 when no check fails, 1 when one does, 2 for a usage error,
+3 when Hyperliquid couldn't be reached.`;
 
 const isAddress = (v: string): v is Hex => /^0x[0-9a-fA-F]{40}$/.test(v);
 const isTxHash = (v: string): v is Hex => /^0x[0-9a-fA-F]{64}$/.test(v);

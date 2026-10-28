@@ -60,7 +60,7 @@ Address-mode seam tests (`src/orders.seam.test.ts`) replay real testnet orders: 
 
 Find more with `pnpm find-cases [--blocks 20000] [--mainnet]`, which scans recent blocks and lists candidate tx hashes by kind.
 
-Exit code is 1 when any check fails, so it works in CI (`--json` keeps the same exit codes).
+Exit code is 1 when any check fails, so it works in CI (`--json` keeps the same exit codes). It is 2 for a usage error and 3 when Hyperliquid couldn't be reached or rate-limited the request; then nothing was diagnosed and stderr says why.
 
 ## Development
 

@@ -82,7 +82,7 @@ export const startReplayServer = async (fixturePath: string, record = process.en
     endpoints,
     misses,
     close: async () => {
-      await new Promise<void>((r) => server.close(() => r()));
+      await new Promise<void>((r) => { server.close(() => r()); server.closeAllConnections(); });
       if (record) writeFileSync(fixturePath, `${JSON.stringify(fixture, null, 2)}\n`);
     },
   };
@@ -95,5 +95,5 @@ export const startFakeServer = async (handler: FakeHandler): Promise<ReplayServe
     const r = handler({ path, contentType, body: JSON.parse(body) });
     return { status: r.status ?? 200, body: JSON.stringify(r.body) };
   }, misses);
-  return { endpoints, misses, close: () => new Promise<void>((r) => server.close(() => r())) };
+  return { endpoints, misses, close: () => new Promise<void>((r) => { server.close(() => r()); server.closeAllConnections(); }) };
 };

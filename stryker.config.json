@@ -9,7 +9,9 @@
     "src/fetch.ts",
     "src/args.ts",
     "src/render.ts",
-    "src/orders.ts"
+    "src/orders.ts",
+    "src/failure.ts",
+    "src/main.ts"
   ],
   "reporters": [
     "clear-text",

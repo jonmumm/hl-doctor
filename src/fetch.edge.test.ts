@@ -182,6 +182,13 @@ describe("ledger window", () => {
   });
 });
 
+describe("rpc HTTP errors", () => {
+  it("names the method and HTTP status instead of failing to parse the body", async () => {
+    server = await startFakeServer(() => ({ status: 429, body: "rate limited" }));
+    await expect(fetchEvmTx("testnet", HASH, server.endpoints)).rejects.toThrow(/^eth_get\w+: HTTP 429 "rate limited"$/);
+  });
+});
+
 describe("orders", () => {
   const ORDER = { coin: "BTC", side: "A", limitPx: "65000.0", sz: "0.0", origSz: "0.01", oid: 7, cloid: null, timestamp: 1 };
 
