@@ -1,9 +1,17 @@
 // What to tell the user when Hyperliquid couldn't answer, instead of a stack trace.
 import type { Network } from "./types.ts";
 
+// Node's connect errors are often an AggregateError with an empty message: the reason is in .errors or .code.
+const describe = (e: unknown): string => {
+  if (!(e instanceof Error)) return String(e);
+  if (e.message) return e.message;
+  if (e instanceof AggregateError && e.errors.length > 0) return describe(e.errors[0]);
+  return "code" in e ? String(e.code) : e.name;
+};
+
 const messages = (error: unknown): string[] => {
   const out: string[] = [];
-  for (let e = error; e !== undefined; e = e instanceof Error ? e.cause : undefined) out.push(e instanceof Error ? e.message : String(e));
+  for (let e = error; e !== undefined; e = e instanceof Error ? e.cause : undefined) out.push(describe(e));
   return out;
 };
 

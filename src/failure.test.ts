@@ -31,6 +31,17 @@ describe("describeFailure", () => {
     );
   });
 
+  it("shows the first inner error when the root cause is an AggregateError with no message", () => {
+    const root = new AggregateError([new Error("connect ECONNREFUSED 3.165.160.41:443"), new Error("connect ECONNREFUSED 3.165.160.24:443")], "");
+    const error = new TypeError("fetch failed", { cause: root });
+    expect(describeFailure(error, "testnet")).toMatch(/^Couldn't reach Hyperliquid testnet \(connect ECONNREFUSED 3\.165\.160\.41:443\)\./);
+  });
+
+  it("falls back to the error code when nothing has a message", () => {
+    const root = Object.assign(new AggregateError([], ""), { code: "ENETUNREACH" });
+    expect(describeFailure(new TypeError("fetch failed", { cause: root }), "testnet")).toMatch(/\(ENETUNREACH\)/);
+  });
+
   it("treats a timeout as unreachable", () => {
     expect(describeFailure(new Error("The operation was aborted due to timeout"), "mainnet")).toMatch(/^Couldn't reach Hyperliquid mainnet \(The operation was aborted due to timeout\)/);
   });
