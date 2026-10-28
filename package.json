@@ -12,6 +12,12 @@
     "cli"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonmumm/hl-doctor.git"
+  },
+  "homepage": "https://github.com/jonmumm/hl-doctor#readme",
+  "bugs": "https://github.com/jonmumm/hl-doctor/issues",
   "author": "Jonathan Mumm",
   "type": "module",
   "bin": {

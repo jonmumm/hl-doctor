@@ -37,7 +37,8 @@
 | Recorded fixtures | Re-record with `HL_RECORD=1`, never hand-edit |
 
 ## Off-limits
-- Never publish to npm, add a git remote, or push. The owner publishes.
+- Never publish to npm or change the GitHub repo's visibility. The owner does both.
+- Remote: github.com/jonmumm/hl-doctor (`origin`). Push only when the owner asks.
 - Never sign or send transactions, and never add private keys. This tool is read-only.
 - Never modify existing tests to make new code pass; flag the behaviour change instead.
 
